@@ -23,7 +23,6 @@ public class Saving {
         detail = Main.frame.detailPanel;
 
         file = new File(getPathWithoutExtension() + ".ideanote");
-        file.mkdir();
         file.createNewFile();
 
 
@@ -74,8 +73,6 @@ public class Saving {
     }
 
     private boolean saveDetailData() {
-        System.out.println("saveDetailData");
-
         try {
             for(InputPanel panel : detail.getDetailPanels()) {
                 String title = panel.getTitle();
@@ -89,6 +86,7 @@ public class Saving {
             return false;
         }
     }
+
     //WRITE_WORD FUNKTIONEN
     final String spaceSmall = "  ", spaceBig = "    ", spaceHuge = spaceBig + spaceBig;
 

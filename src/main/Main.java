@@ -19,8 +19,6 @@ public class Main {
 
         //Das Frame erstellen
         frame = new Frame();
-
-        loader.load(new File("D:\\Dokumente\\Ideen\\AutoLight2\\AutoLight_-_Das_automatische_Licht.ideanote"));
     }
 
 }
