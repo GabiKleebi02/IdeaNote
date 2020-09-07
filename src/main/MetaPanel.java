@@ -9,7 +9,7 @@ public class MetaPanel extends JPanel {
     private InputPanel panelTitle, panelAuthors, panelPath;
 
     public MetaPanel() {
-        setSize(new Dimension(Frame.screen.width, Frame.screen.height/3 * 2));
+        setSize(new Dimension(Main.frame.screen.width, Main.frame.screen.height/3 * 2));
 
         //Das Layout erstellen
         GridBagLayout gridbag = new GridBagLayout();

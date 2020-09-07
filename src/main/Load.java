@@ -8,22 +8,41 @@ public class Load {
     private static DetailPanel detail;
     private static MetaPanel meta;
 
-    public static void load(File file) {
-        meta = Frame.metaPanel;
-        detail = Frame.detailPanel;
+    public void load(File file) {
+        meta = Main.frame.metaPanel;
+        detail = Main.frame.detailPanel;
 
         Load.file = file;
 
         //Den BufferedReader erstellen und bei Fehler returnen
-        if(!createReader())
+        if(!createReader()) {
+            Main.frame.setInfoPanelError("Fehler beim Laden (Erstellen des Readers)");
             return;
+        }
 
         //Die Daten lesen und bei Fehler returnen
-        if(!readMeta() || !readDetail())
-            return;
+        if(!readMeta() || !readDetail()) {
+            try {
+                reader.close();
+                Main.frame.setInfoPanelError("Fehler beim Laden (Lesen der Daten)");
+                return;
+            } catch (IOException e) {
+                e.printStackTrace();
+                Main.frame.setInfoPanelError("Fehler beim Laden (Lesen der Daten & Schließen des Readers)");
+                return;
+            }
+        }
+
+        try {
+            reader.close();
+            Main.frame.setInfoPanelInfo("Datei erfolgreich geladen!");
+        } catch (IOException e) {
+            e.printStackTrace();
+            Main.frame.setInfoPanelError("Fehler beim Laden! (Schließen des Readers, aber erfolgreich geladen)");
+        }
     }
 
-    private static boolean createReader() {
+    private boolean createReader() {
         try {
             FileReader fileReader = new FileReader(file);
             reader = new BufferedReader(fileReader);
@@ -35,7 +54,7 @@ public class Load {
         }
     }
 
-    private static boolean readMeta() {
+    private boolean readMeta() {
         //Reihenfolge: Titel, Autor, Pfad
 
         try {
@@ -55,7 +74,7 @@ public class Load {
         }
     }
 
-    private static boolean readDetail() {
+    private boolean readDetail() {
         try {
             for (String line = reader.readLine(); line != null; line = reader.readLine()) {
                 String[] lineArr = line.split(":");

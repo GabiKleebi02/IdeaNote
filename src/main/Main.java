@@ -5,6 +5,8 @@ import java.io.File;
 
 public class Main {
     public static Frame frame;
+    public static Saving saving = new Saving();
+    public static Load loader = new Load();
 
     public static void main(String[] args) {
 
@@ -17,6 +19,8 @@ public class Main {
 
         //Das Frame erstellen
         frame = new Frame();
+
+        loader.load(new File("D:\\Dokumente\\Ideen\\AutoLight2\\AutoLight_-_Das_automatische_Licht.ideanote"));
     }
 
 }

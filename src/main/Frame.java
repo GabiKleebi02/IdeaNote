@@ -10,12 +10,13 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 
 public class Frame extends JFrame {
     public static Dimension screen;
-    public static MetaPanel metaPanel;
-    public static DetailPanel detailPanel;
+    public MetaPanel metaPanel;
+    public DetailPanel detailPanel;
+    private JTextField infoPanel;
 
     public Frame() {
         super("IdeaNote");
-        setMinimumSize(new Dimension(750, 480));
+        setMinimumSize(new Dimension(750, 520));
         screen = Toolkit.getDefaultToolkit().getScreenSize();
 
         //Das Layout erstellen
@@ -54,12 +55,28 @@ public class Frame extends JFrame {
         gridbag.setConstraints(scrollDetails, constraints);
         add(scrollDetails);
 
-        //Den Button zum Speichern hinzufügen
+        //Die Button zum Speichern hinzufügen
         JButton saveButton = createSaveButton();
         constraints.gridy = 2;
         constraints.weighty = 0.5;
         gridbag.setConstraints(saveButton, constraints);
         add(saveButton);
+
+        JButton writeButton = createWriteButton();
+        constraints.gridy = 3;
+        gridbag.setConstraints(writeButton, constraints);
+        add(writeButton);
+
+        //Das Infopanel hinzufügen
+        infoPanel = new JTextField();
+        infoPanel.setHorizontalAlignment(SwingConstants.CENTER);
+        infoPanel.setBackground(detailPanel.getBackground());
+        infoPanel.setBorder(null);
+        constraints.gridy = 4;
+        constraints.weighty = 0.25;
+        gridbag.setConstraints(infoPanel, constraints);
+        add(infoPanel);
+        setInfoPanelInfo("Keine Fehler aufgetreten!");
 
         //Die Menüleiste hinzufügen
         addMenuBar();
@@ -74,7 +91,24 @@ public class Frame extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 try {
-                    Saving.save();
+                    Main.saving.save();
+                } catch (IOException ioException) {
+                    ioException.printStackTrace();
+                }
+            }
+        });
+
+        return button;
+    }
+
+    private JButton createWriteButton() {
+        JButton button = new JButton("Schreiben");
+
+        button.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                try {
+                    Main.saving.writeWord();
                 } catch (IOException ioException) {
                     ioException.printStackTrace();
                 }
@@ -98,7 +132,7 @@ public class Frame extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 try {
-                    Saving.save();
+                    Main.saving.save();
                 } catch (IOException ioException) {
                     ioException.printStackTrace();
                 }
@@ -115,7 +149,7 @@ public class Frame extends JFrame {
                 int output = fc.showOpenDialog(null);
 
                 if(output == JFileChooser.APPROVE_OPTION) {
-                    Load.load(fc.getSelectedFile());
+                    Main.loader.load(fc.getSelectedFile());
                 }
             }
         });
@@ -128,6 +162,19 @@ public class Frame extends JFrame {
         menuBar.add(fileMenu);
 
         setJMenuBar(menuBar);
+    }
+
+    public void setInfoPanelInfo(String info) {
+       setInfoPanelText(info, Color.BLACK);
+    }
+
+    public void setInfoPanelError(String error) {
+        setInfoPanelText(error, Color.RED);
+    }
+
+    public void setInfoPanelText(String text, Color color) {
+        infoPanel.setForeground(color);
+        infoPanel.setText(text);
     }
 
 }
